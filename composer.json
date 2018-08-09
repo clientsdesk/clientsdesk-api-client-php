@@ -1,7 +1,7 @@
 {
   "name": "clientsdesk/clientsdesk-api-client-php",
   "description": "Clientsdesk.net REST API PHP Client.",
-  "license": "MIT License",
+  "license": "MIT",
   "homepage": "https://github.com/clientsdesk/clientsdesk-api-client-php",
   "require": {
     "php": ">=7.1.0",
