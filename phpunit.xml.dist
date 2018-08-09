@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpunit
+        bootstrap="tests/bootstrap.php"
+        colors="true"
+        backupGlobals="false"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+>
+    <php>
+        <env name="API_KEY" value="pLhQ6UhxsPZ8p7QU4S3rT6btXfH6yiVBjciKirnD"/>
+        <env name="TEST_HOSTNAME" value="api-clientsdesk.eu.ngrok.io"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Clientsdesk API Unit Test Suites">
+            <directory>./tests/Clientsdesk/API/UnitTests</directory>
+        </testsuite>
+        <testsuite name="Clientsdesk API Live Test Suites">
+            <directory>./tests/Clientsdesk/API/LiveTests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

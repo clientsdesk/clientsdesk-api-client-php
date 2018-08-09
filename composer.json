@@ -1,0 +1,22 @@
+{
+  "name": "clientsdesk/clientsdesk-api-client-php",
+  "description": "Clientsdesk.net REST API PHP Client.",
+  "license": "MIT License",
+  "homepage": "https://github.com/clientsdesk/clientsdesk-api-client-php",
+  "require": {
+    "php": ">=7.1.0",
+    "php-http/guzzle6-adapter": "^1.1.0",
+    "php-http/client-common": "^1.1",
+    "php-http/discovery": "^0.9",
+    "mmucklo/inflect": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7",
+    "fzaninotto/faker": ">=1.5.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "Clientsdesk\\API\\": "src/"
+    }
+  }
+}

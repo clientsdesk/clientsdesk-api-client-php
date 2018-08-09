@@ -1,0 +1,7 @@
+vendor
+tests/.env
+composer.lock
+/tests/.phpunit.result.cache
+/.phpunit.result.cache
+/tests/Clientsdesk/API/LiveTests/.phpunit.result.cache
+/tests/Clientsdesk/API/UnitTests/.phpunit.result.cache
