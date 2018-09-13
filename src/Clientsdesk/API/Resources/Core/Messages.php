@@ -11,10 +11,10 @@ class Messages extends ResourceAbstract
 {
     use InstantiatorTrait;
 
-    use Defaults {
-        create as traitCreate;
-//        update as traitUpdate;
-    }
+//    use Defaults {
+//        create as traitCreate;
+////        update as traitUpdate;
+//    }
 
     /**
      * Declares routes to be used by this resource.
@@ -23,7 +23,7 @@ class Messages extends ResourceAbstract
     {
         parent::setUpRoutes();
         $this->setRoutes([
-            'create' => 'messages',
+            'create' => 'messages'
         ]);
     }
 

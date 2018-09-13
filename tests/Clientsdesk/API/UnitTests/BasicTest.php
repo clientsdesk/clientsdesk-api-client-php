@@ -17,41 +17,22 @@ abstract class BasicTest extends TestCase
     /**
      * @var string
      */
-    protected $subdomain;
+    protected $api_signature;
     /**
      * @var string
      */
-    protected $password;
-    /**
-     * @var string
-     */
-    protected $token;
-    /**
-     * @var string
-     */
-    protected $oAuthToken;
+    protected $api_key;
     /**
      * @var string
      */
     protected $hostname;
-    /**
-     * @var string
-     */
-    protected $scheme;
-    /**
-     * @var string
-     */
-    protected $port;
-    /**
-     * @var array
-     */
-    protected $mockedTransactionsContainer = [];
 
     /**
      * {@inheritdoc}
      */
     public function __construct($name = null, array $data = [], $dataName = '')
     {
+        $this->api_signature = getenv('API_SIGNATURE');
         $this->api_key = getenv('API_KEY');
         $this->hostname = getenv('TEST_HOSTNAME');
         parent::__construct($name, $data, $dataName);
@@ -63,7 +44,7 @@ abstract class BasicTest extends TestCase
      */
     protected function setUp()
     {
-        $this->client = new HttpClient($this->api_key, $this->hostname);
+        $this->client = new HttpClient($this->api_key, $this->api_signature, $this->hostname);
         $this->client->setApiBasePath('api/v1');
     }
 }

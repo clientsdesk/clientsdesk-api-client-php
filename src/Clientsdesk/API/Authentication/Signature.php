@@ -13,14 +13,19 @@ class Signature implements Authentication
      */
     private $api_key;
 
+    /**
+     * @var string
+     */
+    private $access_key;
 
     /**
      * @param string $api_key
-     * @param string $password
+     * @param string $access_key
      */
-    public function __construct($api_key)
+    public function __construct($api_key, $access_key)
     {
         $this->api_key = $api_key;
+        $this->access_key = $access_key;
     }
 
     public function authenticate(RequestInterface $request)
@@ -29,7 +34,7 @@ class Signature implements Authentication
         $timestamp = time();
         $time_digest = join([$timestamp, $token]);
         $signature = hash_hmac('sha256', $time_digest, $this->api_key, false );
-        $header = sprintf('CD1-HMAC-SHA256 Token=%s Signature=%s Timestamp=%u', $token, $signature, $timestamp);
+        $header = sprintf('CD1-HMAC-SHA256 Token=%s Signature=%s Timestamp=%u Key=%s', $token, $signature, $timestamp, $this->access_key);
         return $request->withHeader('Authorization', $header);
     }
 }

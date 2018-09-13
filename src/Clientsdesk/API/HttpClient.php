@@ -3,6 +3,7 @@
 namespace Clientsdesk\API;
 
 use Clientsdesk\API\Resources\Core\Messages;
+use Clientsdesk\API\Resources\Core\WebForms;
 use Clientsdesk\API\Traits\Utility\InstantiatorTrait;
 use Clientsdesk\API\Authentication\Signature;
 use Http\Discovery\HttpClientDiscovery;
@@ -66,6 +67,7 @@ class HttpClient
 
     public function __construct(
         $apiKey,
+        $apiSignature,
         $hostname = "",
         $subdomain = "",
         $scheme = "https",
@@ -73,10 +75,11 @@ class HttpClient
         $guzzle = null
     )
     {
+        $this->apiSignature = $apiSignature;
         $this->apiKey = $apiKey;
 
         // Create an HTTP Client
-        $authentication = new Signature($this->apiKey);
+        $authentication = new Signature($this->apiSignature, $this->apiKey);
 
         if (is_null($guzzle)) {
             $this->guzzle = new PluginClient(
@@ -118,6 +121,7 @@ class HttpClient
     {
         return [
             'messages' => Messages::class,
+            'web_forms' => WebForms::class
         ];
     }
 
@@ -226,6 +230,28 @@ class HttpClient
     public function getDebug()
     {
         return $this->debug;
+    }
+
+    /**
+     * This is a helper method to do a get request.
+     *
+     * @param       $endpoint
+     * @param array $queryParams
+     *
+     * @return \stdClass | null
+     * @throws \Clientsdesk\API\Exceptions\AuthException
+     * @throws \Clientsdesk\API\Exceptions\ApiResponseException
+     */
+    public function get($endpoint, $queryParams = [])
+    {
+
+        $response = Http::send(
+            $this,
+            $endpoint,
+            ['queryParams' => $queryParams]
+        );
+
+        return $response;
     }
 
     /**

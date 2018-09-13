@@ -8,7 +8,8 @@
         convertWarningsToExceptions="true"
 >
     <php>
-        <env name="API_KEY" value="pLhQ6UhxsPZ8p7QU4S3rT6btXfH6yiVBjciKirnD"/>
+        <env name="API_SIGNATURE" value="pLhQ6UhxsPZ8p7QU4S3rT6btXfH6yiVBjciKirnD"/>
+        <env name="API_KEY" value="_btdvARd"/>
         <env name="TEST_HOSTNAME" value="api-clientsdesk.eu.ngrok.io"/>
     </php>
 

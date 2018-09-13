@@ -62,6 +62,14 @@ class Http
             $request = $request->withBody(\GuzzleHttp\Psr7\stream_for(json_encode($options['postFields'])));
         }
 
+        if (! empty($options['queryParams'])) {
+            foreach ($options['queryParams'] as $queryKey => $queryValue) {
+                $uri     = $request->getUri();
+                $uri     = $uri->withQueryValue($uri, $queryKey, $queryValue);
+                $request = $request->withUri($uri, true);
+            }
+        }
+
         try {
             $response = $http_client->guzzle->sendRequest($request);
         } catch (HttpException $e) {
