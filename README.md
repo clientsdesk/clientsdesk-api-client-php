@@ -24,8 +24,9 @@ require 'vendor/autoload.php';
 use Clientsdesk\API\HttpClient as ClientsdeskAPI;
 
 $api_key     = "pLhQ6UhxsPZ8p7QU4S3rT6btXfH6yiVBjciKirnD"; // replace this with your api key
+$api_signature     = "pLhQ6UhxsPZ8p7QU4S3rT6btXfH6yiVBjciKirnD"; // replace this with your api signature
 
-$client = new ClientsdeskAPI($api_key);
+$client = new ClientsdeskAPI($api_key, $api_signature);
 ```
 
 ## Usage

@@ -20,7 +20,7 @@ use Http\Client\Common\Plugin\RetryPlugin;
  */
 class HttpClient
 {
-    const VERSION = '0.0.1';
+    const VERSION = '0.0.2';
 
     use InstantiatorTrait;
 
@@ -33,6 +33,10 @@ class HttpClient
      * @var string
      */
     protected $apiKey;
+    /**
+     * @var string
+     */
+    protected$apiSignature;
     /**
      * @var string
      */
