@@ -1,11 +1,7 @@
 <?php
-declare(strict_types=1);
-
 namespace Clientsdesk\API;
 
-use GuzzleHttp\Psr7\Request;
 use Clientsdesk\API\Exceptions\ApiResponseException;
-use Http\Client\Exception\HttpException;
 
 
 /**
@@ -17,7 +13,7 @@ class Http
     /**
      * Use the send method to call every endpoint except for oauth/tokens
      *
-     * @param HttpClient $http_client
+     * @param Curl $curl_client
      * @param string $endPoint E.g. "/web_form_request"
      * @param array $options
      *                             Available options are listed below:
@@ -30,7 +26,7 @@ class Http
      *
      */
     public static function send(
-        HttpClient $http_client,
+        Curl $curl_client,
         $endPoint,
         $options = []
     )

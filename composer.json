@@ -4,7 +4,7 @@
   "license": "MIT",
   "homepage": "https://github.com/clientsdesk/clientsdesk-api-client-php",
   "require": {
-    "php": "^5.3 || ^7.0",
+    "php": "^5.4 || ^7.0",
     "php-curl-class/php-curl-class": ">=8.3.2"
   },
   "require-dev": {
