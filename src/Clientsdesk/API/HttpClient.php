@@ -262,8 +262,7 @@ class HttpClient
      * This is a helper method to do a post request.
      *
      * @param       $endpoint
-     * @param       $type
-     * @param array $attributes
+     * @param array $postData
      *
      * @param array $options
      * @return \stdClass | null
