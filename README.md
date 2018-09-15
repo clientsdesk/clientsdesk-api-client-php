@@ -2,7 +2,7 @@
 PHP Client to connect clientsdesk.net
 
 ## Requirements
-* PHP 7.1+
+* PHP 5.6+
 
 ## Installation
 
