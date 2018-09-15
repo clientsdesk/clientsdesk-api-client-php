@@ -23,9 +23,28 @@ class WebFormsTest extends BasicTest
           'per_page' => 1
         ];
         $response = $this->client->web_forms()->getIndex($indexParams);
-        $web_forms = $response->data;
-        $count = count($web_forms);
-        $this->assertNotEmpty($web_forms);
+//        $response = $this->client->get('/web_forms', $indexParams);
+        $count = count($response);
+        $this->assertNotEmpty($response);
+        $this->assertEquals(1, $count);
+    }
+
+    /**
+     * Test we can handle api exceptions, wrong route
+     *
+     * @expectedException Clientsdesk\API\Exceptions\ApiResponseException
+     * @expectedExceptionMessage Not Found
+     */
+    public function testCreateWrongSourceId()
+    {
+        $indexParams = [
+            'page' => 0,
+            'per_page' => 1
+        ];
+//        $response = $this->client->web_forms()->getIndex($indexParams);
+        $response = $this->client->get('/WRONG', $indexParams);
+        $count = count($response);
+        $this->assertNotEmpty($response);
         $this->assertEquals(1, $count);
     }
 
@@ -39,9 +58,9 @@ class WebFormsTest extends BasicTest
             'per_page' => 5
         ];
         $response = $this->client->web_forms()->getIndex($indexParams);
-        $web_forms = $response->data;
-        $count = count($web_forms);
-        $this->assertNotEmpty($web_forms);
-        $this->assertEquals(5, $count);
+//        $response = $this->client->get('/web_forms', $indexParams);
+        $count = count($response);
+        $this->assertNotEmpty($response);
+        $this->assertEquals(1, $count);
     }
 }

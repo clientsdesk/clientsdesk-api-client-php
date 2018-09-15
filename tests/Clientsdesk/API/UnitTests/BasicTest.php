@@ -45,6 +45,5 @@ abstract class BasicTest extends TestCase
     protected function setUp()
     {
         $this->client = new HttpClient($this->api_key, $this->api_signature, $this->hostname);
-        $this->client->setApiBasePath('api/v1');
     }
 }

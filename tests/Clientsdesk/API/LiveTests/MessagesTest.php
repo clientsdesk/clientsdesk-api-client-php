@@ -35,9 +35,11 @@ class MessagesTest extends BasicTest
 
         ];
         $response = $this->client->messages()->create($messageAttributes);
-        $message = $response->message;
-        $this->assertEquals($messageAttributes['body'], $message->body);
-        $this->assertEquals($messageAttributes['subject'], $message->subject);
+        var_dump($response);
+        print_r($response);
+//        $message = $response->message;
+        $this->assertEquals($messageAttributes['body'], $response['message']['body']);
+        $this->assertEquals($messageAttributes['subject'],  $response['message']['subject']);
 
         return $response;
     }
@@ -71,8 +73,8 @@ class MessagesTest extends BasicTest
         ];
         $response = $this->client->messages()->create($messageAttributes);
         $message = $response->message;
-        $this->assertEquals($messageAttributes['body'], $message->body);
-        $this->assertEquals($messageAttributes['subject'], $message->subject);
+        $this->assertEquals($messageAttributes['body'],  $response['message']['body']);
+        $this->assertEquals($messageAttributes['subject'], $response['message']['subject']);
 
         return $response;
     }

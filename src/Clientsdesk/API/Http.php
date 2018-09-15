@@ -1,11 +1,8 @@
 <?php
-declare(strict_types=1);
 
 namespace Clientsdesk\API;
 
-use GuzzleHttp\Psr7\Request;
 use Clientsdesk\API\Exceptions\ApiResponseException;
-use Http\Client\Exception\HttpException;
 
 
 /**
@@ -38,52 +35,38 @@ class Http
 
         $options = array_merge(
             [
-                'method'      => 'GET',
+                'method' => 'GET',
                 'contentType' => 'application/json',
-                'postFields'  => null,
+                'postFields' => null,
                 'queryParams' => null
             ],
             $options
         );
 
-        $headers = array_merge([
-            'Accept'       => 'application/json',
-            'Content-Type' => $options['contentType'],
-            'User-Agent'   => $http_client->getUserAgent()
-        ], $http_client->getHeaders());
+        $url = $http_client->getApiUrl() . $http_client->getApiBasePath() . $endPoint;
 
-        $request = new Request(
-            $options['method'],
-            $http_client->getApiUrl() . $http_client->getApiBasePath() . $endPoint,
-            $headers
-        );
+        $http_client->curl_client->setDefaultJsonDecoder($assoc = true);
+        $http_client->curl_client->setHeader('Content-Type', $options['contentType']);
 
-        if (! empty($options['postFields'])) {
-            $request = $request->withBody(\GuzzleHttp\Psr7\stream_for(json_encode($options['postFields'])));
-        }
-
-        if (! empty($options['queryParams'])) {
-            foreach ($options['queryParams'] as $queryKey => $queryValue) {
-                $uri     = $request->getUri();
-                $uri     = $uri->withQueryValue($uri, $queryKey, $queryValue);
-                $request = $request->withUri($uri, true);
-            }
-        }
-
-        try {
-            $response = $http_client->guzzle->sendRequest($request);
-        } catch (HttpException $e) {
-            throw new ApiResponseException($e);
-        } finally {
-            $http_client->setDebug(
-                $request->getHeaders(),
-                $request->getBody(),
-                isset($response) ? $response->getStatusCode() : null,
-                isset($response) ? $response->getHeaders() : null,
-                isset($e) ? $e : null
+        if ($options['method'] == 'POST') {
+            $http_client->curl_client->post(
+                $url,
+                $options['postFields']
             );
-            $request->getBody()->rewind();
+        } else {
+            $http_client->curl_client->get(
+                $url,
+                $options['queryParams']
+            );
         }
-        return json_decode($response->getBody()->getContents());
+
+        if ($http_client->curl_client->error) {
+            echo 'Error: ' . $http_client->curl_client->errorCode . ': ' . $http_client->curl_client->errorMessage . "\n";
+            throw new ApiResponseException($http_client->curl_client);
+        } else {
+            return $http_client->curl_client->getResponse();
+        }
+
+
     }
 }

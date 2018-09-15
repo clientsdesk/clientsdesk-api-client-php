@@ -2,9 +2,7 @@
 
 namespace Clientsdesk\API\Exceptions;
 
-use Http\Client\Exception\HttpException;
-use Http\Client\Common\Exception\ClientErrorException;
-use Http\Client\Common\Exception\ServerErrorException;
+use Curl\Curl;
 
 /**
  * Class ApiResponseException
@@ -14,28 +12,31 @@ use Http\Client\Common\Exception\ServerErrorException;
 class ApiResponseException extends \Exception
 {
     /**
-     * @var array
+     * @param Curl $curl
      */
     protected $errorDetails = [];
-    public function __construct(HttpException $e)
+
+    public function __construct(Curl $curl)
     {
-        $message = $e->getMessage();
-        if ($e instanceof ClientErrorException) {
-            $response           = $e->getResponse();
-            $responseBody       = $response->getBody()->getContents();
-            $this->errorDetails = json_decode($responseBody, true);
-            $message .= ' [details] ' . $responseBody;
-        } elseif ($e instanceof ServerErrorException) {
+        $message = $curl->errorMessage;
+        $code =  $curl->getErrorCode();
+        if ($code < 500) {
+            $message .= ' [details] ' . $curl->getErrorMessage();
+        } elseif ($code >= 500) {
             $message .= ' [details] Clientsdesk may be experiencing internal issues or undergoing scheduled maintenance.';
-        } elseif (! $e->getResponse()) {
-            $request = $e->getRequest();
+        } elseif (!$code) {
             // Unsuccessful response, log what we can
-            $message .= ' [url] ' . $request->getUri();
-            $message .= ' [http method] ' . $request->getMethod();
-            $message .= ' [body] ' . $request->getBody()->getContents();
+            $message .= '[url ]' . $curl->url;
+            $message .= '[requestHeaders ]' . $curl->requestHeaders;
+            $message .= '[responseHeaders ]' . $curl->responseHeaders;
+            $message .= '[rawResponseHeaders ]' . $curl->rawResponseHeaders;
+            $message .= '[responseCookies ]' . $curl->responseCookies;
+            $message .= '[response ]' . $curl->response;
+            $message .= '[rawResponse ]' . $curl->rawResponse;
         }
-        parent::__construct($message, $e->getCode(), $e);
+        parent::__construct($message, (int)$curl->errorCode);
     }
+
     /**
      * Returns an array of error fields with descriptions. http://jsonapi.org/format/#error-objects
      *
