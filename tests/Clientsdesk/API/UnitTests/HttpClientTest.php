@@ -34,9 +34,8 @@ class HttpClientTest extends BasicTest
         ];
 
         $response = $this->client->post('/messages', $messageAttributes);
-        $message = $response->message;
-        $this->assertEquals($messageAttributes['message']['body'], $message->body);
-        $this->assertEquals($messageAttributes['message']['subject'], $message->subject);
+        $this->assertEquals($messageAttributes['message']['body'],  $response['message']['body']);
+        $this->assertEquals($messageAttributes['message']['subject'], $response['message']['subject']);
     }
 
     /**

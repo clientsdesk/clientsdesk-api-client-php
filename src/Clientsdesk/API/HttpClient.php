@@ -2,12 +2,17 @@
 
 namespace Clientsdesk\API;
 
-use \Curl\Curl;
+use Clientsdesk\API\Resources\Core\Messages;
+use Clientsdesk\API\Resources\Core\WebForms;
+use Clientsdesk\API\Traits\Utility\InstantiatorTrait;
+use Curl\Curl;
 
 
 class HttpClient
 {
-    const VERSION = '0.0.3';
+    const VERSION = '0.0.4';
+
+    use InstantiatorTrait;
 
     /**
      * @var string
@@ -27,6 +32,11 @@ class HttpClient
      * @var string
      */
     protected $apiUrl;
+
+    /**
+     * @var string
+     */
+    protected $apiBasePath;
 
     /**
      * @var string
@@ -56,10 +66,11 @@ class HttpClient
     public function __construct(
         $apiKey,
         $apiSignature,
+        $hostname = "",
         $referrer = "",
-        $hostname = "api-clientsdesk.net",
         $subdomain = "",
         $scheme = "https",
+        $apiBasePath = "api/v1",
         $port = 443,
         $curl_client = null
     )
@@ -69,12 +80,21 @@ class HttpClient
         $this->referrer = $referrer;
         $this->hostname = $hostname;
         $this->scheme = $scheme;
+        $this->apiBasePath = $apiBasePath;
+
 
         if (is_null($curl_client)) {
             $this->curl_client = new Curl();
         } else {
             $this->curl_client = $curl_client;
         }
+
+        if (empty($hostname)) {
+            $this->hostname = "api-clientsdesk.net";
+        } else {
+            $this->hostname = $hostname;
+        }
+
         if (empty($subdomain)) {
             $this->apiUrl = "$scheme://$hostname:$port/";
         } else {
@@ -86,6 +106,48 @@ class HttpClient
         $this->curl_client->setReferrer($this->referrer);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public static function getValidSubResources()
+    {
+        return [
+            'messages' => Messages::class,
+            'web_forms' => WebForms::class
+        ];
+    }
+
+    /**
+     * Returns the generated api URL
+     *
+     * @return string
+     */
+    public function getApiUrl()
+    {
+        return $this->apiUrl;
+    }
+
+    /**
+     * Sets the api base path
+     *
+     * @param string $apiBasePath
+     */
+    public function setApiBasePath($apiBasePath)
+    {
+        $this->apiBasePath = $apiBasePath;
+    }
+
+    /**
+     * Returns the api base path
+     *
+     * @return string
+     */
+    public function getApiBasePath()
+    {
+        return $this->apiBasePath;
+    }
 
     /**
      * Return the user agent string
@@ -100,7 +162,6 @@ class HttpClient
     /**
      * Set Auth headers
      *
-     * @throws \Exception
      */
     protected function setAuth()
     {
@@ -115,19 +176,18 @@ class HttpClient
     /**
      * This is a helper method to do a get request.
      *
-     * @param       $endpoint
+     * @param       $endPoint
      * @param array $queryParams
      *
      * @return \stdClass | null
-     * @throws \Clientsdesk\API\Exceptions\AuthException
      * @throws \Clientsdesk\API\Exceptions\ApiResponseException
      */
-    public function get($endpoint, $queryParams = [])
+    public function get($endPoint, $queryParams = [])
     {
 
         $response = Http::send(
             $this,
-            $endpoint,
+            $endPoint,
             ['queryParams' => $queryParams]
         );
 
@@ -138,38 +198,25 @@ class HttpClient
     /**
      * This is a helper method to do a post request.
      *
-     * @param       $endpoint
+     * @param       $endPoint
      * @param array $postData
      *
      * @param array $options
      * @return \stdClass | null
      * @throws \Clientsdesk\API\Exceptions\ApiResponseException
      */
-    public function post($endpoint, $postData = [], $options = [])
+    public function post($endPoint, $postData = [], $options = [])
     {
-
-        $uri = $this->getApiUrl() . $http_client->getApiBasePath() . $endPoint,
-        $this->curl_client->post('https://httpbin.org/post', array(
-            'id' => '1',
-            'content' => 'Hello world!',
-            'date' => date('Y-m-d H:i:s'),
-        ));
-        if ($curl->error) {
-            echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
-        } else {
-            echo 'Data server received via POST:' . "\n";
-            var_dump($curl->response->form);
-        }
-
         $extraOptions = array_merge($options, [
             'postFields' => $postData,
             'method' => 'POST'
         ]);
         $response = Http::send(
             $this,
-            $endpoint,
+            $endPoint,
             $extraOptions
         );
+
         return $response;
     }
 }
