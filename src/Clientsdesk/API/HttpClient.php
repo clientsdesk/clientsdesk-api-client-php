@@ -10,7 +10,7 @@ use Curl\Curl;
 
 class HttpClient
 {
-    const VERSION = '0.0.4';
+    const VERSION = '0.0.5';
 
     use InstantiatorTrait;
 

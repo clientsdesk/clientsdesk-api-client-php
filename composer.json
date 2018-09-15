@@ -13,8 +13,8 @@
     "mmucklo/inflect": "*"
   },
   "autoload": {
-    "psr-0": {
-      "Clientsdesk\\API\\": "src/"
+    "psr-4": {
+      "Clientsdesk\\API\\": "./src/Clientsdesk/API"
     }
   }
 }
