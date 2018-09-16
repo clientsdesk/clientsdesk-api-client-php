@@ -14,14 +14,15 @@ class ApiResponseException extends \Exception
     /**
      * @param Curl $curl
      */
-    protected $errorDetails = [];
+    protected $errorDetails = '';
 
     public function __construct(Curl $curl)
     {
         $message = $curl->errorMessage;
         $code =  $curl->getErrorCode();
+        $this->errorDetails = $curl->getErrorMessage();
         if ($code < 500) {
-            $message .= ' [details] ' . $curl->getErrorMessage();
+            $message .= ' [details] ' .  $this->errorDetails;
         } elseif ($code >= 500) {
             $message .= ' [details] Clientsdesk may be experiencing internal issues or undergoing scheduled maintenance.';
         } elseif (!$code) {

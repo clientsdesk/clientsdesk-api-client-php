@@ -22,7 +22,14 @@ class WebForms extends ResourceAbstract
     }
 
 
-
+    /**
+     * This is a helper method to do a get request.
+     *
+     * @param   array $params
+     *
+     * @return \stdClass | null
+     * @throws \Clientsdesk\API\Exceptions\ApiResponseException
+     */
     public function getIndex(array $params)
     {
         $route = $this->getRoute(__FUNCTION__, $params);
