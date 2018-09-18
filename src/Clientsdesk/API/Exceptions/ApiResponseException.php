@@ -20,7 +20,7 @@ class ApiResponseException extends \Exception
     {
         $message = $curl->errorMessage;
         $code =  $curl->getErrorCode();
-        $this->errorDetails = $curl->getErrorMessage();
+        $this->errorDetails = $curl->getRawResponse();
         if ($code < 500) {
             $message .= ' [details] ' .  $this->errorDetails;
         } elseif ($code >= 500) {

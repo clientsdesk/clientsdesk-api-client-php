@@ -12,29 +12,21 @@ class HttpClientTest extends BasicTest
     {
         $faker = Factory::create();
         // Create a new web form request
-        $messageAttributes = [
-            'message' => [
-                'source' => [
-                    'id' => 'c2ejKyquro3gbN88y-Wx',
-                    'type' => 'web_form'
-                ],
-                'body' => $faker->sentence(15),
-                'subject' => $faker->sentence(5),
-                'form_tags' => [$faker->word(), $faker->word()],
-                'author' => [
-                    'name' => $faker->name(),
-                    'email' => $faker->email()
-                ],
-                'meta' => [
-                    'test_meta_1' => $faker->sentence(3),
-                    'test_meta_2' => $faker->sentence(3)
-                ]
-
-            ]
+        $messageAttributes = ['message' => [
+            'source' => [
+                'id' => '5cVsx6JHHwHCnm5MtHxF',
+                'type' => 'web_form'
+            ],
+            'body' => $faker->sentence(15),
+            'subject' => $faker->sentence(5),
+            'name' => $faker->name(),
+            'email' => $faker->email(),
+            'custom_info' => $faker->sentence(3)
+        ]
         ];
 
         $response = $this->client->post('/messages', $messageAttributes);
-        $this->assertEquals($messageAttributes['message']['body'],  $response['message']['body']);
+        $this->assertEquals($messageAttributes['message']['body'], $response['message']['body']);
         $this->assertEquals($messageAttributes['message']['subject'], $response['message']['subject']);
     }
 

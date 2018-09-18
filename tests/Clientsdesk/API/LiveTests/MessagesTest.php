@@ -14,32 +14,32 @@ class MessagesTest extends BasicTest
 {
 
     public function testCreate()
+        /*
+         * Live test if real web form.
+         * Web Form data:
+         *   hash_id: "5cVsx6JHHwHCnm5MtHxF",
+         * fields: [
+         * {"type"=>"email", "name"=>"email", "label"=>"Email", "placeholder"=>"Email", "required"=>true, "recommended"=>true},
+         * {"type"=>"text", "name"=>"name", "label"=>"Name", "placeholder"=>"Enter your name", "required"=>false, "recommended"=>true},
+         * {"type"=>"text", "name"=>"subject", "label"=>"Subject", "placeholder"=>"Subject", "required"=>false, "recommended"=>true},
+         * {"type"=>"text", "name"=>"body", "label"=>"Message body", "placeholder"=>"Body text here", "required"=>false, "recommended"=>true},
+         * {"type"=>"hidden", "name"=>"custom_info", "label"=>"", "placeholder"=>"Some custom info here", "required"=>false, "recommended"=>false}
+         * ]
+         *
+         */
     {
         $faker = Factory::create();
         $messageAttributes = [
-            'source' => [
-                'id' => 'c2ejKyquro3gbN88y-Wx',
-                'type' => 'web_form'
-            ],
+            'form_id' => '5cVsx6JHHwHCnm5MtHxF',
             'body' => $faker->sentence(15),
             'subject' => $faker->sentence(5),
-            'tags' => [$faker->word(), $faker->word()],
-            'author' => [
-                'name' => $faker->name(),
-                'email' => $faker->email()
-            ],
-            'meta' => [
-                'test_meta_1' => $faker->sentence(3),
-                'test_meta_2' => $faker->sentence(3)
-            ]
-
+            'name' => $faker->name(),
+            'email' => $faker->email(),
+            'custom_info' =>  $faker->sentence(3)
         ];
         $response = $this->client->messages()->create($messageAttributes);
-        var_dump($response);
-        print_r($response);
-//        $message = $response->message;
         $this->assertEquals($messageAttributes['body'], $response['message']['body']);
-        $this->assertEquals($messageAttributes['subject'],  $response['message']['subject']);
+        $this->assertEquals($messageAttributes['subject'], $response['message']['subject']);
 
         return $response;
     }
@@ -54,26 +54,40 @@ class MessagesTest extends BasicTest
     {
         $faker = Factory::create();
         $messageAttributes = [
-            'source' => [
-                'id' => 'wrong_id',
-                'type' => 'web_form'
-            ],
+            'form_id' => 'wrong_id',
             'body' => $faker->sentence(15),
             'subject' => $faker->sentence(5),
-            'form_tags' => [$faker->word(), $faker->word()],
-            'author' => [
-                'name' => $faker->name(),
-                'email' => $faker->email()
-            ],
-            'meta' => [
-                'test_meta_1' => $faker->sentence(3),
-                'test_meta_2' => $faker->sentence(3)
-            ]
+            'name' => $faker->name(),
+            'email' => $faker->email(),
+            'custom_info' =>  $faker->sentence(3)
 
         ];
         $response = $this->client->messages()->create($messageAttributes);
-        $message = $response->message;
-        $this->assertEquals($messageAttributes['body'],  $response['message']['body']);
+        $this->assertEquals($messageAttributes['body'], $response['message']['body']);
+        $this->assertEquals($messageAttributes['subject'], $response['message']['subject']);
+
+        return $response;
+    }
+
+    /**
+     * Test we can handle api exceptions, by finding a non-existing ticket
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Form ID required
+     */
+    public function testCreateWithoutId()
+    {
+        $faker = Factory::create();
+        $messageAttributes = [
+            'body' => $faker->sentence(15),
+            'subject' => $faker->sentence(5),
+            'name' => $faker->name(),
+            'email' => $faker->email(),
+            'custom_info' =>  $faker->sentence(3)
+
+        ];
+        $response = $this->client->messages()->create($messageAttributes);
+        $this->assertEquals($messageAttributes['body'], $response['message']['body']);
         $this->assertEquals($messageAttributes['subject'], $response['message']['subject']);
 
         return $response;
