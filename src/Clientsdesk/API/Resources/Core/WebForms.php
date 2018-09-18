@@ -17,7 +17,8 @@ class WebForms extends ResourceAbstract
     {
         parent::setUpRoutes();
         $this->setRoutes([
-            'getIndex' => 'web_forms'
+            'getIndex' => 'web_forms',
+            'show' => 'web_forms'
         ]);
     }
 
@@ -33,6 +34,24 @@ class WebForms extends ResourceAbstract
     public function getIndex(array $params)
     {
         $route = $this->getRoute(__FUNCTION__, $params);
+        return $this->client->get(
+            $route,
+            $params
+        );
+    }
+
+    /**
+     * This is a helper method to do a get request.
+     *
+     * @param   string $form_id
+     * @param   array $params
+     *
+     * @return \stdClass | null
+     * @throws \Clientsdesk\API\Exceptions\ApiResponseException
+     */
+    public function show($form_id, array $params = [])
+    {
+        $route = $this->getRoute(__FUNCTION__) . '/' . $form_id;
         return $this->client->get(
             $route,
             $params

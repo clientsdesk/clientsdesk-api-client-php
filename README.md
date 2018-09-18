@@ -33,6 +33,8 @@ $client = new ClientsdeskAPI($api_key, $api_signature);
 
 ### Basic Operations
 
+* Hint: You can find examples and operations in tests directory.
+
 ``` php
 
 // Create new message from Web form
@@ -48,5 +50,13 @@ $messageAttributes = [
         $response = $this->client->messages()->create($messageAttributes);
         $message = $response->message;
 print_r($message);
+
+// Get Web Forms list
+
+$indexParams = [
+            'page' => 0,
+            'per_page' => 5
+        ];
+        $response = $this->client->web_forms()->getIndex($indexParams);
 
 ```

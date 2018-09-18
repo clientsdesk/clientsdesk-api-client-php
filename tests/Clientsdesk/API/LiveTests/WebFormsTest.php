@@ -43,7 +43,7 @@ class WebFormsTest extends BasicTest
         ];
 //        $response = $this->client->web_forms()->getIndex($indexParams);
         $response = $this->client->get('/WRONG', $indexParams);
-        $count = count($response);
+        $count = count($response['web_forms']);
         $this->assertNotEmpty($response);
         $this->assertEquals(1, $count);
     }
@@ -58,9 +58,28 @@ class WebFormsTest extends BasicTest
             'per_page' => 5
         ];
         $response = $this->client->web_forms()->getIndex($indexParams);
-//        $response = $this->client->get('/web_forms', $indexParams);
-        $count = count($response);
+        $count = count($response['web_forms']);
         $this->assertNotEmpty($response);
-        $this->assertEquals(1, $count);
+        $this->assertEquals(5, $count);
+    }
+
+    /**
+     * Except to get 1 Web Form from API in JSON format
+     */
+    public function testShow()
+    {
+        /*
+         * Get froms list
+         */
+        $indexParams = [
+            'page' => 0,
+            'per_page' => 5
+        ];
+        $list = $this->client->web_forms()->getIndex($indexParams);
+        $form_id = $list['web_forms'][0]['hash_id'];
+
+        $response = $this->client->web_forms()->show($form_id);
+        $this->assertNotEmpty($response);
+        $this->assertEquals($response['web_form']['hash_id'], $form_id);
     }
 }
