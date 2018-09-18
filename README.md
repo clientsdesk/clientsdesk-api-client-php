@@ -37,21 +37,12 @@ $client = new ClientsdeskAPI($api_key, $api_signature);
 
 // Create new message from Web form
 $messageAttributes = [
-            'source' => [
-                'id' => 'c2ejKyquro3gbN88y-Wx',
-                'type' => 'web_form'
-            ],
+            'form_id' => 'form id here',
             'body' => 'some body from form',
             'subject' => 'optional subject',
-            'tags' => ['some tag 1', 'some tag 2'],
-            'author' => [
-                'name' => 'First name Last name',
-                'email' => 'test@test.com'
-            ],
-            'meta' => [
-                'test_meta_1' => 'some meta 1 value',
-                'test_meta_2' => 'some meta 1 value'
-            ]
+            'name' => 'Test User',
+            'email' => 'test@test.com',
+            'custom_info => 'Some custom'
 
         ];
         $response = $this->client->messages()->create($messageAttributes);
